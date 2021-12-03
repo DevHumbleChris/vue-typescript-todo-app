@@ -1,13 +1,23 @@
 <template>
-  <ul class="todos">
-    <li v-for="todo in orderedTodos" :key="todo.id" class="itemTodo">
-      <label class="todoItem" :for="todo.todoName" :name="todo.todoName" :class="{ 'completed': todo.isCompleted }">
-        {{ todo.todoName }}
-      </label>
-      <input v-model="todo.isCompleted" type="checkbox" :id="todo.todoName" :name="todo.todoName">
-    </li>
-  <button class="btn btnClear">Clear All</button>
-  </ul>
+  <div class="todos">
+    <transition-group v-if="orderedTodos" name="list" tag="ul">
+      <li v-for="todo in orderedTodos" :key="todo.id" class="itemTodo">
+        <div class="flexTodo">
+          <input v-model="todo.isCompleted" type="checkbox" :id="todo.todoName" :name="todo.todoName">
+          <label class="todoItem" :for="todo.todoName" :name="todo.todoName" :class="{ 'completed': todo.isCompleted }">
+            {{ todo.todoName }}
+          </label>
+        </div>
+        <button class="btnRemove" @click="removeTodo(todo.id)">
+          - Remove
+        </button>
+      </li>
+    </transition-group>
+    <button v-if="orderedTodos.length > 0" class="btn btnClear" @click="clearAll">Clear All</button>
+    <div v-else class="itemTodo">
+      No todos Created
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -42,8 +52,18 @@ export default defineComponent({
       return orderedTodos
     })
 
+    const clearAll = () => {
+      store.commit('CLEAR_ALL_TODOS')
+    }
+
+    const removeTodo = (id: number) => {
+      store.commit('REMOVE_TODO', id)
+    }
+
     return {
-      orderedTodos
+      orderedTodos,
+      clearAll,
+      removeTodo
     }
   }
 })
@@ -63,12 +83,28 @@ export default defineComponent({
   text-decoration: line-through;
 }
 .itemTodo {
+  margin: auto;
   background: #fff;
   padding: 12px;
   border-radius: 5px;
   margin-top: 0.3rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+.flexTodo {
+  display: flex;
+  align-items: center;
+}
+.btnRemove {
+  margin: auto;
+  border: none;
+  color: #ff0000;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+}
+.list-move {
+  transition: all 1s;
 }
 </style>

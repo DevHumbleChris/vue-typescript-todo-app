@@ -45,10 +45,12 @@ export default defineComponent({
     const orderTerm = ref<OrderTerm>('all')
 
     const totalTodos = computed(() => {
-      return todos.length
+      return store.getters.totalTodos
     })
 
-    const todos = store.state.todos
+    const todos = computed(() => {
+      return store.state.todos
+    })
 
     const handleSubmit = () => {
       store.commit('ADD_TODOS', singleTodo.value)
