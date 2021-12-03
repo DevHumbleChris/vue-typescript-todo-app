@@ -16,7 +16,7 @@
         <option value="incompleted">Incompleted</option>
       </select>
     </div>
-    <HelloWorld :todos="todos" :orderTerm="orderTerm" />
+    <HelloWorld :orderTerm="orderTerm" />
   </div>
 </template>
 
@@ -25,6 +25,7 @@ import { defineComponent, ref, computed } from 'vue'
 import Todo from '@/types/Todo'
 import OrderTerm from '@/types/OrderTerm'
 import HelloWorld from '@/components/HelloWorld.vue' // @ is an alias to /src
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'Home',
@@ -32,6 +33,8 @@ export default defineComponent({
     HelloWorld
   },
   setup () {
+    const store = useStore()
+
     const singleTodo = ref<Todo>({
       id: Date.now(),
       todoName: '',
@@ -42,22 +45,19 @@ export default defineComponent({
     const orderTerm = ref<OrderTerm>('all')
 
     const totalTodos = computed(() => {
-      return todos.value.length
+      return todos.length
     })
 
-    const todos = ref<Todo[]>([])
+    const todos = store.state.todos
 
     const handleSubmit = () => {
-      const newTodos = [...todos.value, singleTodo.value]
+      store.commit('ADD_TODOS', singleTodo.value)
       singleTodo.value = {
         id: Date.now(),
         todoName: '',
         isCompleted: false,
         dateCreated: new Date().toLocaleString()
       }
-      todos.value = newTodos
-      console.log(todos.value)
-      return todos.value
     }
 
     return {

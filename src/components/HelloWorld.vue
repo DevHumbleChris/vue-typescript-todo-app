@@ -13,31 +13,30 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
 import Todo from '@/types/Todo'
+import { useStore } from 'vuex'
 import OrderTerm from '@/types/OrderTerm'
 
 export default defineComponent({
   name: 'HelloWorld',
   props: {
-    todos: {
-      required: true,
-      type: Array as PropType<Todo[]>
-    },
     orderTerm: {
       required: true,
       type: String as PropType<OrderTerm>
     }
   },
   setup (props) {
+    const store = useStore()
+
     const orderedTodos = computed(() => {
       let orderedTodos: Todo[] = []
       if (props.orderTerm === 'completed') {
-        orderedTodos = [...props.todos].filter((item: Todo) => item.isCompleted === true)
+        orderedTodos = store.state.todos.filter((item: Todo) => item.isCompleted === true)
       }
       if (props.orderTerm === 'incompleted') {
-        orderedTodos = [...props.todos].filter((item: Todo) => item.isCompleted === false)
+        orderedTodos = store.state.todos.filter((item: Todo) => item.isCompleted === false)
       }
       if (props.orderTerm === 'all') {
-        orderedTodos = props.todos
+        orderedTodos = store.state.todos
       }
 
       return orderedTodos
