@@ -4,7 +4,7 @@
       <img alt="Vue logo" src="../assets/logo.png" class="img_logo">
       <h4>Todo App (Vue 3 + Vuex + TypeScript)</h4>
     </div>
-    <div v-if="modalMessage" class="modal">
+    <div v-if="modalMessage" class="modal flexWrapper">
       {{ modalMessage }}
     </div>
     <form method="POST" @submit.prevent="handleSubmit" class="flexWrapper formContainer">
@@ -20,6 +20,7 @@
       </select>
     </div>
     <HelloWorld :orderTerm="orderTerm" />
+    <p class="flexWrapper author">Made By AmChrisKE</p>
   </div>
 </template>
 
@@ -152,5 +153,8 @@ input[type=text], select {
   border-radius: 5px;
   background: rgb(46, 224, 141);
   color: #fff;
+}
+.autho {
+  margin-top: 0.4rem;
 }
 </style>
