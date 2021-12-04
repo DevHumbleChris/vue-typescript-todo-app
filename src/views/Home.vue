@@ -4,6 +4,9 @@
       <img alt="Vue logo" src="../assets/logo.png" class="img_logo">
       <h4>Todo App (Vue 3 + Vuex + TypeScript)</h4>
     </div>
+    <div v-if="modalMessage" class="modal">
+      {{ modalMessage }}
+    </div>
     <form method="POST" @submit.prevent="handleSubmit" class="flexWrapper formContainer">
       <input v-model="singleTodo.todoName" type="text" placeholder="e.g watch movies" required>
       <button type="submit" class="btn btnAdd">+ ADD</button>
@@ -62,12 +65,17 @@ export default defineComponent({
       }
     }
 
+    const modalMessage = computed(() => {
+      return store.state.modalMessage
+    })
+
     return {
       todos,
       singleTodo,
       handleSubmit,
       totalTodos,
-      orderTerm
+      orderTerm,
+      modalMessage
     }
   }
 })
@@ -135,5 +143,14 @@ input[type=text], select {
 
 .infoText {
   font-weight: 400;
+}
+
+.modal {
+  margin: auto;
+  max-width: 22rem;
+  padding: 12px;
+  border-radius: 5px;
+  background: rgb(46, 224, 141);
+  color: #fff;
 }
 </style>
